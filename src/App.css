@@ -7,30 +7,32 @@
   height: 80px;
 }
 
-.col1,.col2,.col3 {
+.col {
   position: relative;
   width:calc(100% / 3);
   float:left;
-  height:100vh;
+  height:80vh;
+
+  
+      -moz-transform:rotate(-180deg);
+    -webkit-transform:rotate(-180deg);
+    -o-transform:rotate(-180deg);
+    -ms-transform:rotate(-180deg);
 }
 
 
 .disc {
-  width:calc(50%);
-  float:middle;
-  bottom:0;
+
+  float:top;
+  
   height:calc(1.8vh);
   position:relative;
   /*padding: 50px;*/
   /*border: 50px solid green;*/
 
-  background-color: blue
-}
-
-
-.disc1{
   background-color: green
 }
+
 .col1 {
   background-color: red
 }
@@ -40,7 +42,7 @@
 }
 
 .col3 {
-  background-color: green
+  background-color: white
 }
 
 .App-header {

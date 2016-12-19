@@ -11,47 +11,65 @@ class App extends Component {
     super(props)
     var tower = [];
 
-    for (var i = 0; i <= 3; i++) {
+    for (var i = 1; i < 5; i++) {
        tower.push(i);
     }
     this.state = {
       towers:[tower,[],[]],
-      sorting:false
+      solved:false,
+      solution:false,
+      speed: 1000
+
     }
   }
 
   startHanoi(){
-    var temp;
-    var towers = this.state.towers;
-    var hanoi = function(disc,src,aux,dst) {
-      console.log(this)
+    var solution = [];
+    var hanoiSolution = function(disc,src,aux,dst) {
       if (disc > 0) {
-        hanoi.apply(this,[disc - 1,src,dst,aux]);
-        this.wait(70);
-        console.log("Move disc " + disc + " from " + src + " to " + dst + "<br />");
-
-        towers[dst].push(towers[src].pop())
-        this.setState({towers})
-
-        hanoi.apply(this,[disc - 1,aux,src,dst]);
+        hanoiSolution.apply(this,[disc - 1,src,dst,aux]);
+        // console.log("Move disc " + disc + " from " + src + " to " + dst + "<br />");
+        solution.push([src,dst])
+        hanoiSolution.apply(this,[disc - 1,aux,src,dst]);
       }
     };
-    this.setState({sorting:true});
-    hanoi.apply(this,[this.state.towers[0].length,0,1,2])
-    this.setState({sorting:false});
+    
+    hanoiSolution.apply(this,[this.state.towers[0].length,0,1,2])
+    this.setState({solved:true,solution:solution},this.hanoiStep);
+    console.log(solution)
   }
-  hanoiStep
-  wait(ms){
-    var start = new Date().getTime();
-    var end = start;
-    while(end < start + ms) {
-     end = new Date().getTime();
+
+  hanoiStep(){
+    if(this.state.solution.length !==0) {
+
+      var towers = this.state.towers;
+      var solution = this.state.solution
+      var step = solution.shift()
+      towers[step[1]].unshift(towers[step[0]].shift())
+
+      
+      setTimeout(()=>{this.setState({solution:solution,towers:towers}, this.hanoiStep)}, this.state.speed)
+      
+      
     }
+
   }
+
+  changeSize(){
+    var tower = []
+    for (var i = 1; i <= document.getElementById("selector").value; i++) {
+      tower.push(i);
+    }
+    this.setState({towers:[tower,[],[]]})
+    console.log("test")
+  }
+
   render() {
     console.log(this.state)
-    
-
+    var options = []
+    for(var i=1; i<55;i++){
+      options.push(<option value={i} key={i}>{i}</option>);
+    }
     
 
     return (
@@ -59,19 +77,24 @@ class App extends Component {
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
-          <button onClick={this.startHanoi.bind(this)}>Click me</button>
+          <button onClick={this.startHanoi.bind(this)}>solve</button>
+          <select id ="selector" onChange={this.changeSize.bind(this)} >
+            {options}
+          </select>
         </div>
 
-        <div className="col1"> 
+        <div className="col col1"> 
           <Tower tower={this.state.towers[0]} />
         </div>
-        <div className="col2">
+        <div className="col col2">
           <Tower tower={this.state.towers[1]} />
         </div>
-        <div className="col3">
+        <div className="col col3">
           <Tower tower={this.state.towers[2]} />
         </div>
+
       </div>
+
     );
   }
 }

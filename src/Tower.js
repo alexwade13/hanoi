@@ -17,18 +17,23 @@ export default class Tower extends React.Component {
 	render(){
 
 
-		var tower = this.state.tower
-		var temp;
+		var tower = this.props.tower
     var divs =[]
     var width;
+    var left;
     var style;
     var classes;
-    for(var i=0;i < this.state.tower.length; i++){
-      temp = React.createElement("div");
-      width = i + "%";
+    for(var i=this.props.tower.length -1;i >= 0 ; i--){
+      
+      width = tower[i] + "%";
+      left = 50 - tower[i]/2 + "%"
+      style = {
+        width:width,
+        left:left
+      }
 
       classes = "disc disc" + tower[i]
-      divs.push(<div className={classes} key={i}>stuff?</div>);
+      divs.push(<div className={classes} style={style} key={i}></div>);
       
 
     }
