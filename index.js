@@ -13,4 +13,8 @@ app.use(bodyParser.json());
 // Set static file location
 app.use(express.static(__dirname + '/build'))
 
-app.listen(port);
+
+
+app.get('/', function(request, response) {
+  response.render('index');
+});
