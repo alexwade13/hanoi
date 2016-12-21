@@ -1,23 +1,24 @@
-const express = require("express");
+// server/app.js
+const express = require('express');
+const morgan = require('morgan');
+const path = require('path');
 
-const cors = require("cors");
-
-const port = process.env.PORT || 8888; 
-
-// Initialize the server 
 const app = express();
-// Add middleware 
-app.use(cors());
-app.use(bodyParser.json());
 
-// Set static file location
-app.use(express.static(__dirname + '/build'))
+// Setup logger
+app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'));
 
-app.get('/', function(request, response) {
-  response.render('index');
+// Serve static assets
+app.use(express.static(path.resolve(__dirname, 'build')));
+
+// Always return the main index.html, so react-router render the route in the client
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
 });
 
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
+'use strict';
+const PORT = process.env.PORT || 9000;
+ 
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}!`);
 });
-
